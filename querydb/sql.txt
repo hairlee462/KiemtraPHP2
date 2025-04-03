@@ -1,0 +1,55 @@
+CREATE DATABASE Test1;
+USE Test1;
+
+CREATE TABLE NganhHoc (
+    MaNganh CHAR(4) PRIMARY KEY,
+    TenNganh NVARCHAR(30)
+);
+
+CREATE TABLE SinhVien (
+    MaSV CHAR(10) PRIMARY KEY,
+    HoTen NVARCHAR(50) NOT NULL,
+    GioiTinh NVARCHAR(5),
+    NgaySinh DATE,
+    Hinh VARCHAR(50),
+    MaNganh CHAR(4),
+    Password VARCHAR(50), -- Thêm cột password cho đăng nhập
+    FOREIGN KEY (MaNganh) REFERENCES NganhHoc(MaNganh)
+);
+
+CREATE TABLE HocPhan (
+    MaHP CHAR(6) PRIMARY KEY,
+    TenHP NVARCHAR(30) NOT NULL,
+    SoTinChi INT,
+    SoLuongDuKien INT -- Thêm số lượng dự kiến
+);
+
+CREATE TABLE DangKy (
+    MaDK INT AUTO_INCREMENT PRIMARY KEY,
+    NgayDK DATE,
+    MaSV CHAR(10),
+    FOREIGN KEY (MaSV) REFERENCES SinhVien(MaSV)
+);
+
+CREATE TABLE ChiTietDangKy (
+    MaDK INT,
+    MaHP CHAR(6),
+    PRIMARY KEY (MaDK, MaHP),
+    FOREIGN KEY (MaDK) REFERENCES DangKy(MaDK),
+    FOREIGN KEY (MaHP) REFERENCES HocPhan(MaHP)
+);
+
+-- Insert dữ liệu mẫu
+INSERT INTO NganhHoc(MaNganh, TenNganh) VALUES
+('CNTT', 'Công nghệ thông tin'),
+('QTKD', 'Quản trị kinh doanh');
+
+INSERT INTO SinhVien(MaSV, HoTen, GioiTinh, NgaySinh, Hinh, MaNganh, Password) VALUES
+('0123456789', 'Nguyễn Văn A', 'Nam', '2000-12-02', 'sv1.jpg', 'CNTT', '123456'),
+('9876543210', 'Nguyễn Thị B', 'Nữ', '2000-07-03', 'sv2.jpg', 'QTKD', '123456');
+
+INSERT INTO HocPhan(MaHP, TenHP, SoTinChi, SoLuongDuKien) VALUES
+('CNTT01', 'Lập trình C', 3, 50),
+('CNTT02', 'Cơ sở dữ liệu', 2, 50),
+('QTKD01', 'Kinh tế vi mô', 2, 50),
+('QTDK02', 'Xác suất thống kê 1', 3, 50);
